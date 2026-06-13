@@ -1,11 +1,7 @@
 <?php 
     session_start();  
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "greenlife";
-
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    require_once __DIR__ . '/config.php';
+    $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
     $data_table = isset($_POST['data_table']) ? $_POST['data_table'] : $_GET['data_table'];
     $offset = (int)$_POST['offset'];

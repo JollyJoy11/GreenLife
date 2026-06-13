@@ -4,12 +4,8 @@
     $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
     unset($_SESSION['errors']); 
 
-    $servername = "localhost"; 
-    $username = "root"; 
-    $password = ""; 
-    $dbname = "greenlife";
-
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    require_once __DIR__ . '/config.php';
+    $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
     //Login 
     if (isset($_POST['login_user'])) {

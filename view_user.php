@@ -38,12 +38,8 @@ if (!(isset($_SESSION['username']) && $_SESSION['username']=='Admin')){
 
 <article>
 	<?php 
-		$servername = "localhost";
-		$username = "root";
-		$password = "";
-		$dbname = "greenlife";
-	
-		$conn = mysqli_connect($servername, $username, $password, $dbname);
+		require_once __DIR__ . '/config.php';
+		$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 		//Sort
 		$sort_item = isset($_GET['title']) ? $_GET['title'] : 'ID';
