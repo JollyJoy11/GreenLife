@@ -1,5 +1,7 @@
 # GreenLife
 
+**Live site:** [jollyjoy.infinityfreeapp.com](https://jollyjoy.infinityfreeapp.com)
+
 A web-based plant and herbarium management system built with PHP and MySQL. GreenLife allows users to explore plant classifications, learn herbarium techniques, identify plants, and contribute their own plant specimens.
 
 ## Features
