@@ -102,5 +102,5 @@ GreenLife/
 |--------|-------|
 | Ellie  | aboutme1.php |
 | Joanne | aboutme2.php |
-| Aryn   | aboutme3.php · identify.php |
+| Aryn   | aboutme3.php |
 | Cyndia | aboutme4.php |
