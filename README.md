@@ -6,7 +6,7 @@ A web-based plant and herbarium management system built with PHP and MySQL. Gree
 
 - **Plant Classification** — Browse plants organized by family, genus, and species (focused on Lauraceae)
 - **Herbarium Guide** — Step-by-step tutorial, tools reference, and care tips for herbarium specimens
-- **Plant Identification** — Identify plants using an interactive global forest map and reference data
+- **Plant Identification** — Upload a plant photo and get AI-powered species predictions using a Keras model
 - **User Contributions** — Registered users can submit plant and herbarium photos for admin review
 - **Enquiry System** — Submit enquiries; admins reply via email using PHPMailer
 - **Feedback** — Star-rating feedback form on the homepage
@@ -16,40 +16,103 @@ A web-based plant and herbarium management system built with PHP and MySQL. Gree
 
 ## Tech Stack
 
-- **Backend**: PHP (procedural)
-- **Database**: MySQL (via MySQLi)
-- **Frontend**: HTML, CSS, Font Awesome icons
-- **Email**: PHPMailer
-- **Server**: Apache (XAMPP)
+| Layer | Technology |
+|---|---|
+| Backend | PHP (procedural) |
+| Database | MySQL (via MySQLi) |
+| Frontend | HTML, CSS, Font Awesome icons |
+| Email | PHPMailer |
+| Local server | Apache (XAMPP) |
+| ML service | Python, Flask, TensorFlow 2.14 / Keras |
+| PHP hosting | InfinityFree |
+| ML hosting | Render |
+| CI/CD | GitHub Actions (auto-deploy to InfinityFree via FTP) |
 
-## Prerequisites
+## Architecture
 
+```
+Browser
+  │
+  ├── InfinityFree (PHP + MySQL)
+  │     └── identify feature calls →
+  │
+  └── Render (Python Flask + Keras model)
+```
+
+## Local Development Setup
+
+### Prerequisites
 - [XAMPP](https://www.apachefriends.org/) (PHP 7.4+ and MySQL)
-- A web browser
+- [Miniconda](https://docs.conda.io/en/latest/miniconda.html) (for the Python identification service)
 
-## Setup
+### PHP App
 
-1. Clone or copy the project into your XAMPP `htdocs` folder:
+1. Clone the repo into your XAMPP `htdocs` folder:
    ```
    C:\xampp\htdocs\GreenLife\
    ```
 
-2. Start **Apache** and **MySQL** in the XAMPP Control Panel.
+2. Create `config.php` in the project root (this file is excluded from git):
+   ```php
+   <?php
+       define('DB_HOST', 'localhost');
+       define('DB_USER', 'root');
+       define('DB_PASS', '');
+       define('DB_NAME', 'greenlife');
+   ?>
+   ```
 
-3. Open your browser and go to:
-   ```
-   http://localhost/GreenLife/
-   ```
-   The database and all tables are created automatically on first load.
+3. Start **Apache** and **MySQL** in XAMPP Control Panel.
 
-4. Create the upload directory for user-submitted images (the app writes to it but git does not track it):
-   ```
-   mkdir upload_img
-   ```
+4. Visit `http://localhost/GreenLife/` — the database and tables are created automatically.
 
 5. Default admin credentials:
    - **Username**: `Admin`
    - **Password**: `Admin`
+
+### Python Identification Service
+
+1. Create and activate a conda environment:
+   ```
+   conda create --name myenv python=3.11
+   conda activate myenv
+   ```
+
+2. Install dependencies:
+   ```
+   pip install tensorflow==2.14.0 keras==2.14.0 "numpy<2.0" pillow flask
+   ```
+
+3. Start the Flask server:
+   ```
+   cd Plant
+   python plant_identification.py
+   ```
+   The service runs on `http://localhost:5000`. The PHP app will call it automatically when identifying plants.
+
+## Deployment
+
+### PHP App — InfinityFree
+Deployed automatically via **GitHub Actions** on every push to `main`. The workflow:
+- Generates `config.php` from GitHub Secrets (DB credentials never stored in code)
+- Uploads all files to InfinityFree via FTP
+
+Required GitHub Secrets:
+
+| Secret | Description |
+|---|---|
+| `FTP_HOST` | InfinityFree FTP host |
+| `FTP_USER` | InfinityFree FTP username |
+| `FTP_PASS` | InfinityFree FTP password |
+| `DB_HOST` | InfinityFree MySQL host |
+| `DB_USER` | InfinityFree MySQL username |
+| `DB_PASS` | InfinityFree MySQL password |
+| `DB_NAME` | InfinityFree MySQL database name |
+
+### Python Service — Render
+Deployed from the `Plant/` folder using `render.yaml`. Render detects the config automatically.
+
+> **Note:** The plant identification feature requires the Python service to be running. On Render's free tier, the service sleeps after 15 minutes of inactivity (first request after sleep takes ~30s to wake up). Due to memory constraints on the free tier (512MB), the identification feature may not be available on the live site — it works fully in local development.
 
 ## Project Structure
 
@@ -80,6 +143,7 @@ GreenLife/
 ├── movetobin.php           # Soft-delete handler
 ├── enhancement1.php        # Enhancement feature 1
 ├── enhancement2.php        # Enhancement feature 2
+├── config.php              # DB credentials — NOT in git, create manually
 ├── include/
 │   ├── database.php        # DB connection + table creation
 │   ├── functions.php       # Shared utility functions
@@ -92,8 +156,17 @@ GreenLife/
 ├── styles/
 │   └── style.css           # Main stylesheet
 ├── images/                 # Static site images
-├── upload_img/             # User-uploaded images (not tracked by git)
-└── phpmailer/              # PHPMailer library
+├── upload_img/             # User-uploaded contribution images (not tracked by git)
+├── identify_img/           # Temporary identify uploads (not tracked by git)
+├── Plant/
+│   ├── plant_identification.py  # Flask API for plant identification
+│   ├── keras_model.h5           # Trained Keras model
+│   └── requirements.txt         # Python dependencies
+├── phpmailer/              # PHPMailer library
+├── render.yaml             # Render deployment config
+└── .github/
+    └── workflows/
+        └── deploy.yml      # GitHub Actions auto-deploy to InfinityFree
 ```
 
 ## Team
@@ -102,5 +175,5 @@ GreenLife/
 |--------|-------|
 | Ellie  | aboutme1.php |
 | Joanne | aboutme2.php |
-| Aryn   | aboutme3.php |
+| Aryn   | aboutme3.php · identify.php |
 | Cyndia | aboutme4.php |
