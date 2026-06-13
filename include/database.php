@@ -1,12 +1,13 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "greenlife";
+    require_once __DIR__ . '/../config.php';
+    $servername = DB_HOST;
+    $username = DB_USER;
+    $password = DB_PASS;
+    $dbname = DB_NAME;
 
     //Create database
     $conn =  mysqli_connect($servername, $username, $password);
-    $sql = "CREATE DATABASE IF NOT EXISTS greenlife";
+    $sql = "CREATE DATABASE IF NOT EXISTS " . DB_NAME;
     mysqli_query($conn, $sql);
     mysqli_close($conn);
 
