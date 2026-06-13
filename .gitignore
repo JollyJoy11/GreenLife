@@ -1,0 +1,22 @@
+# User-uploaded images
+upload_img/
+identify_img/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# PHP logs & temp files
+*.log
+*.cache
+
+# Composer (if added later)
+vendor/
+composer.lock
