@@ -26,6 +26,10 @@
             $new_identify_photo_name = uniqid("IMG-", true) . '.' . $identify_photo_ex;
             $target_file = 'identify_img/' . $new_identify_photo_name;
 
+            if (!is_dir('identify_img')) {
+                mkdir('identify_img', 0755, true);
+            }
+
             //Move file to a folder
             if (move_uploaded_file($identify_photo_tmp, $target_file)){
                 //Send http post request to flask server
@@ -40,8 +44,9 @@
                 curl_setopt($curl, CURLOPT_POST, true);
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
+                curl_setopt($curl, CURLOPT_TIMEOUT, 90);
 
-                $response = curl_exec($curl); 
+                $response = curl_exec($curl);
                 $http_status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
                 curl_close($curl);
 
