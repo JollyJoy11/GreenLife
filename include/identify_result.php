@@ -60,7 +60,7 @@
                         $_SESSION['plantphoto'] = $target_file;
                     }
                 } else {
-                    $field_error['identifyphoto'] = "* Error (HTTP $http_status): " . curl_error($curl);
+                    $field_error['identifyphoto'] = "* Error processing image. Please try again later.";
                 }
             }
         } else {
