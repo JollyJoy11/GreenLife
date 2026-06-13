@@ -1,0 +1,39 @@
+name: Deploy to InfinityFree
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Create config.php from secrets
+        run: |
+          cat > config.php << 'EOF'
+          <?php
+              define('DB_HOST', '${{ secrets.DB_HOST }}');
+              define('DB_USER', '${{ secrets.DB_USER }}');
+              define('DB_PASS', '${{ secrets.DB_PASS }}');
+              define('DB_NAME', '${{ secrets.DB_NAME }}');
+          ?>
+          EOF
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          local-dir: ./
+          server-dir: /htdocs/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            Plant/.python-version
+            Plant/runtime.txt
