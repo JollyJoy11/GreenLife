@@ -51,16 +51,16 @@
                 curl_close($curl);
 
                 // Check for errors
-                if ($http_status == 200) { 
-                    $result = json_decode($response, true); 
+                if ($http_status == 200) {
+                    $result = json_decode($response, true);
                     if ($result === null) {
-                        echo "Invalid response from server.";
+                        $field_error['identifyphoto'] = "* Invalid response from server.";
                     } else {
                         $_SESSION['identify_result'] = $result;
                         $_SESSION['plantphoto'] = $target_file;
                     }
-                } else { 
-                    $field_error['identifyphoto'] = "* Error processing image."; 
+                } else {
+                    $field_error['identifyphoto'] = "* Error (HTTP $http_status): " . curl_error($curl);
                 }
             }
         } else {
