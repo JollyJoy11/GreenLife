@@ -7,7 +7,7 @@ app = Flask("Plant Identification")
 
 # Load the model and class names
 try:
-    model = load_model("keras_Model.h5", compile=False)
+    model = load_model("keras_model.h5", compile=False)
     print("Model loaded successfully!")
 except Exception as e:
     print("Error loading model:", e)
