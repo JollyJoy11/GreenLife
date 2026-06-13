@@ -29,7 +29,7 @@
             //Move file to a folder
             if (move_uploaded_file($identify_photo_tmp, $target_file)){
                 //Send http post request to flask server
-                $flask_url = 'http://localhost:5000/predict';
+                $flask_url = 'https://greenlife-ylki.onrender.com/predict';
                 $curl = curl_init();
 
                 $cfile = new CURLFile($target_file, mime_content_type($target_file), $new_identify_photo_name);
