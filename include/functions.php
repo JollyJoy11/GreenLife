@@ -44,23 +44,24 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
-    
-    require 'phpmailer/src/Exception.php';
-    require 'phpmailer/src/PHPMailer.php';
-    require 'phpmailer/src/SMTP.php';
-    
+
+    require __DIR__ . '/../phpmailer/src/Exception.php';
+    require __DIR__ . '/../phpmailer/src/PHPMailer.php';
+    require __DIR__ . '/../phpmailer/src/SMTP.php';
+
     function sendEmail($to, $subject, $message) {
+        require_once __DIR__ . '/../config.php';
         try {
             $mail = new PHPMailer(true);
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'chinjoanne11@gmail.com'; 
-            $mail->Password = 'pvty guta eeme yaev'; 
+            $mail->Username = MAIL_USER;
+            $mail->Password = MAIL_PASS;
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
-    
-            $mail->setFrom('chinjoanne11@gmail.com');
+
+            $mail->setFrom(MAIL_USER);
             $mail->addAddress($to);
     
             $mail->isHTML(false);

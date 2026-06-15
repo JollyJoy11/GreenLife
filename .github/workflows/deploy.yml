@@ -20,6 +20,8 @@ jobs:
               define('DB_USER', '${{ secrets.DB_USER }}');
               define('DB_PASS', '${{ secrets.DB_PASS }}');
               define('DB_NAME', '${{ secrets.DB_NAME }}');
+              define('MAIL_USER', '${{ secrets.MAIL_USER }}');
+              define('MAIL_PASS', '${{ secrets.MAIL_PASS }}');
           ?>
           EOF
 
