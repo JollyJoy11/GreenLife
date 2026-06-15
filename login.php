@@ -44,15 +44,9 @@
                 } elseif (mysqli_num_rows($admin_results) == 1) {
                     $_SESSION['username'] = $user_name;
                     $_SESSION['success'] = "Logged In";
-                    if (isset($_SESSION['redirect_to'])) {
-                        $redirectUrl = $_SESSION['redirect_to'];
-                        unset($_SESSION['redirect_to']); 
-                        header("Location: " . $redirectUrl); 
-                        exit();
-                    } else {
-                        header('Location: view_user.php');
-                        exit();
-                    }
+                    unset($_SESSION['redirect_to']);
+                    header('Location: view_user.php');
+                    exit();
                 } else {
                     array_push($errors, " Incorrect username or password.");
                 }
