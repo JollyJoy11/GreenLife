@@ -1,6 +1,9 @@
 # Credentials
 config.php
 
+# Internal documents
+ContributionForm.pdf
+
 # User-uploaded images
 upload_img/
 identify_img/
