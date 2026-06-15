@@ -42,7 +42,8 @@
                         exit();
                     }
                 } elseif (mysqli_num_rows($admin_results) == 1) {
-                    $_SESSION['username'] = $user_name;
+                    $admin_row = mysqli_fetch_assoc($admin_results);
+                    $_SESSION['username'] = $admin_row['admin_username'];
                     $_SESSION['success'] = "Logged In";
                     unset($_SESSION['redirect_to']);
                     header('Location: view_user.php');
